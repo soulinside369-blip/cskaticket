@@ -159,7 +159,10 @@ export function mountBoard(root: HTMLElement, data: Data) {
     anim = requestAnimationFrame(step);
   };
   const zoomToBox = (b: { x: number; y: number; width: number; height: number }, pad = 40, done?: () => void) => {
-    let w = Math.max(b.width + pad * 2, (b.height + pad * 2) / aspect, 380);
+    // На узком экране приближаем сильнее, чтобы место было удобно нажать пальцем (~20 px).
+    const narrow = stage.clientWidth < 600;
+    if (narrow) pad = Math.min(pad, 10);
+    let w = Math.max(b.width + pad * 2, (b.height + pad * 2) / aspect, narrow ? 170 : 380);
     w = Math.min(w, ZOOM_SEATS_W - 20);
     const h = w * aspect;
     animateTo({ x: b.x + b.width / 2 - w / 2, y: b.y + b.height / 2 - h / 2, w }, done);
@@ -231,6 +234,12 @@ export function mountBoard(root: HTMLElement, data: Data) {
     moved = 0;
     if (pointers.size === 2) { const [a, b] = [...pointers.values()]; pinch = Math.hypot(a.x - b.x, a.y - b.y); }
   });
+  // На тач-экранах подсказку над местом не показываем: она закрывает соседние места,
+  // а выбранные места и цена и так видны в нижней панели.
+  let lastPointer = 'mouse';
+  svg.addEventListener('pointerdown', (e) => { lastPointer = e.pointerType; }, true);
+  const touchLike = () => lastPointer !== 'mouse';
+  svg.addEventListener('keydown', () => { lastPointer = 'mouse'; }, true);
   svg.addEventListener('pointermove', (e) => {
     const prev = pointers.get(e.pointerId);
     if (!prev) return;
@@ -345,7 +354,11 @@ export function mountBoard(root: HTMLElement, data: Data) {
     if (c && e.pointerType === 'mouse') showTip(c);
   });
   seatsLayer.addEventListener('pointerout', () => { hideTip(); restoreView(); });
-  seatsLayer.addEventListener('focusin', (e) => showTip(e.target as SVGCircleElement));
+  seatsLayer.addEventListener('focusin', (e) => {
+    const c = e.target as SVGCircleElement;
+    if (touchLike()) { const p = parse(c.dataset.k!); if (codeOf(c.dataset.k!) !== 's') showView(p, `Сектор ${p.sector} · ряд ${p.row} · место ${p.seat}`); return; }
+    showTip(c);
+  });
   seatsLayer.addEventListener('focusout', hideTip);
 
   // ---------- выбор ----------
@@ -377,7 +390,9 @@ export function mountBoard(root: HTMLElement, data: Data) {
     if (moved > 6) return;
     const t = e.target as Element;
     const seat = t.closest('.seat') as SVGCircleElement | null;
-    if (seat && svg.classList.contains('zoomed')) { toggle(seat.dataset.k!); showTip(seat); return; }
+    if (seat && svg.classList.contains('zoomed')) { toggle(seat.dataset.k!); if (!touchLike()) showTip(seat);
+      else { const k = seat.dataset.k!, c = codeOf(k); if (!selected.has(k) && !selectable(k)) flash(c === 's' ? 'Это место уже продано' : c === 'h' ? 'Место в брони у другого покупателя' : 'Место дороже выбранного бюджета'); else hideTip(); }
+      return; }
     const sec = t.closest('.sector') as SVGGElement | null;
     if (sec) zoomToSector(sec.dataset.sector!);
   });
@@ -561,6 +576,12 @@ export function mountBoard(root: HTMLElement, data: Data) {
   let seen = false;
   try { seen = !!localStorage.getItem('cskaticket:coach2'); } catch { /* ignore */ }
   if (!seen) setTimeout(() => (coach.hidden = false), 1400);
+  // Подсказка больше не нужна, как только человек нажал на сектор.
+  svg.addEventListener('click', (e) => {
+    if (!(e.target as Element).closest('.sector') || coach.hidden) return;
+    coach.hidden = true;
+    try { localStorage.setItem('cskaticket:coach2', '1'); } catch { /* ignore */ }
+  });
   coach.querySelector('[data-coach-close]')!.addEventListener('click', () => {
     coach.hidden = true;
     try { localStorage.setItem('cskaticket:coach2', '1'); } catch { /* ignore */ }

@@ -100,7 +100,7 @@ export function homeView(): View {
           <div><b data-cd="s" class="num">00</b><span>секунд</span></div>
         </div>
         <div class="hero-cta">
-          <a class="btn btn-primary btn-lg shine" href="#/match/${next.slug}">Выбрать места${next.from ? ` <span class="num">· от ${rub(next.from)}</span>` : ''}</a>
+          <a class="btn btn-primary btn-lg shine" href="#/match/${next.slug}?to=seats">Выбрать места${next.from ? ` <span class="num">· от ${rub(next.from)}</span>` : ''}</a>
           <a class="btn btn-ghost btn-lg" href="#/?to=afisha">Все матчи</a>
         </div>
         <button class="replay" type="button" data-replay><i aria-hidden="true">▶</i>Смотреть анонс матча</button>
@@ -150,7 +150,7 @@ export function homeView(): View {
           <li><b>Номер входа</b> указан в билете рядом с сектором.</li>
           <li><b>Места для МГН</b> отмечены на схеме отдельным цветом.</li>
         </ul>
-        <a class="btn btn-secondary" href="#/match/${next.slug}">Открыть схему арены</a>
+        <a class="btn btn-secondary" href="#/match/${next.slug}?to=seats">Открыть схему арены</a>
         <figure class="arena-photo">${arenaView()}<figcaption>Вид с центральной трибуны — смоделирован по схеме. Фото арены от партнёра встанет сюда (RIGHTS-001).</figcaption></figure>
       </div>
     </div>
