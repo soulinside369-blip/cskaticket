@@ -1,10 +1,13 @@
 {
   "name": "cskaticket-platform",
   "private": true,
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "npm run dev -w @platform/storefront",
     "build": "npm run build -w @platform/storefront",
-    "preview": "npm run preview -w @platform/storefront"
+    "release": "npm run build && node scripts/pack.mjs"
   }
 }
