@@ -1,11 +1,13 @@
 # Публикация макета на GitHub Pages: собирает один HTML-файл и выкладывает его как index.html.
-# ВЫКЛЮЧЕНО по решению заказчика (2026-11-09): никакой публичности до подтверждения прав (RIGHTS-001).
-# Pages-сайт открыт всем по ссылке даже у закрытого репозитория. Запуск — только вручную и только
-# после письменного согласия партнёра; тогда же включить Settings → Pages → Source: GitHub Actions.
+# 2026-11-09: включено по решению владельца — онлайн-показ заказчику (витрина + админка).
+# Pages-сайт открыт всем, у кого есть ссылка; индексация запрещена (noindex + robots.txt).
+# Запуск — вручную (Actions → Pages → Run workflow) или пушем в main.
 name: Pages
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
 
 permissions:
   contents: read
@@ -30,7 +32,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run release
-      - run: mkdir -p site && cp release/cskaticket-demo.html site/index.html
+      - run: mkdir -p site && cp release/*.html site/ && printf 'User-agent: *\nDisallow: /\n' > site/robots.txt
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
