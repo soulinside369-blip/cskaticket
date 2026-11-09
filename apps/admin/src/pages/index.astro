@@ -13,7 +13,9 @@ import '../admin.css';
   <div class="demo">Макет админки · все цифры — демо-данные, сгенерированные для показа</div>
   <header class="top">
     <div class="wrap top-in">
-      <div class="brand"><b>CSKATICKET</b><span>Бэк-офис платформы</span></div>
+      <a class="brand" href="./index.html" title="К странице показа">
+        <svg class="mark" viewBox="0 0 44 44" aria-hidden="true"><defs><clipPath id="mk"><path d="M6 4h32a2 2 0 0 1 2 2v12a4 4 0 0 0 0 8v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V26a4 4 0 0 0 0-8V6a2 2 0 0 1 2-2Z"/></clipPath></defs><g clip-path="url(#mk)"><rect width="44" height="44" fill="#1A3A8F"/><path d="M-4 44 30 -4h10L6 44Z" fill="#E4202E"/><path d="M10 44 44 -4h4L14 44Z" fill="#fff" opacity=".9"/></g><text x="22" y="27.5" text-anchor="middle" font-family="system-ui, sans-serif" font-weight="900" font-size="13" fill="#fff">CT</text></svg>
+        <span><b>CSKATICKET</b><span>Бэк-офис платформы</span></span></a>
       <nav class="tabs" role="tablist" aria-label="Разделы">
         <button role="tab" aria-selected="true" data-tab="dash">Дашборд</button>
         <button role="tab" aria-selected="false" data-tab="orders">Заказы</button>
@@ -24,6 +26,7 @@ import '../admin.css';
         <label class="ctl"><span>Роль</span>
           <select id="role"><option value="owner">Владелец</option><option value="manager">Менеджер</option><option value="analyst">Аналитик</option></select>
         </label>
+        <a class="to-shop" href="./cskaticket-demo.html">Витрина ↗</a>
         <button class="theme" id="theme" aria-label="Переключить тему">◐</button>
       </div>
     </div>

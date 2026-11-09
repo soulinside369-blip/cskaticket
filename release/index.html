@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>CSKATICKET — показ макета</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Unbounded:wght@800;900&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #070D1C; --surface: #0F1830; --border: #24304d; --text: #EEF2F8; --muted: #A9B3C7; --accent: #E4202E; --brand: #1A3A8F; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; background: radial-gradient(90% 70% at 80% 0%, rgba(26,58,143,.7), transparent 60%), var(--bg); color: var(--text); font: 16px/1.5 Inter, system-ui, sans-serif; display: grid; place-items: center; padding: 32px 16px; }
+  main { width: 100%; max-width: 980px; }
+  .top { display: flex; align-items: center; gap: 14px; }
+  .top svg { width: 52px; height: 52px; }
+  h1 { font: 900 clamp(30px, 5vw, 54px)/1 Unbounded, Inter, sans-serif; letter-spacing: -.01em; margin: 28px 0 10px; text-transform: uppercase; }
+  p.lead { color: var(--muted); max-width: 60ch; margin: 0 0 32px; }
+  .grid { display: grid; gap: 16px; }
+  @media (min-width: 760px) { .grid { grid-template-columns: 1fr 1fr; } }
+  a.card { position: relative; overflow: hidden; display: grid; gap: 10px; padding: 28px; border-radius: 18px; background: var(--surface); border: 1px solid var(--border); color: inherit; text-decoration: none; transition: transform .25s cubic-bezier(.2,.8,.2,1), border-color .25s; min-height: 240px; }
+  a.card:hover { transform: translateY(-4px); border-color: #3a4a70; }
+  a.card::before { content: ''; position: absolute; inset: auto -20% -60% auto; width: 70%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(228,32,46,.35), transparent 70%); }
+  a.card.admin::before { background: radial-gradient(circle, rgba(57,135,229,.35), transparent 70%); }
+  .tag { font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .card b { font: 800 26px Unbounded, Inter, sans-serif; text-transform: uppercase; }
+  .card ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 14px; }
+  .go { margin-top: auto; display: inline-flex; align-items: center; gap: 8px; font-weight: 700; color: #fff; }
+  .go i { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); font-style: normal; }
+  .note { margin-top: 28px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 16px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <svg viewBox="0 0 44 44" aria-hidden="true"><defs><clipPath id="mk"><path d="M6 4h32a2 2 0 0 1 2 2v12a4 4 0 0 0 0 8v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V26a4 4 0 0 0 0-8V6a2 2 0 0 1 2-2Z"/></clipPath></defs><g clip-path="url(#mk)"><rect width="44" height="44" fill="#1A3A8F"/><path d="M-4 44 30 -4h10L6 44Z" fill="#E4202E"/><path d="M10 44 44 -4h4L14 44Z" fill="#fff" opacity=".9"/></g><text x="22" y="27.5" text-anchor="middle" font-family="Unbounded, sans-serif" font-weight="900" font-size="13" fill="#fff">CT</text></svg>
+    <span class="tag">CSKATICKET · показ макета</span>
+  </div>
+  <h1>Билетная витрина<br>и бэк-офис</h1>
+  <p class="lead">Кликабельный макет: путь покупателя от анонса матча до электронного билета и админка с аналитикой продаж. Данные тестовые, оплата не проводится.</p>
+  <div class="grid">
+    <a class="card" href="./cskaticket-demo.html">
+      <span class="tag">Для покупателя</span>
+      <b>Витрина</b>
+      <ul>
+        <li>Анонс матча при входе</li>
+        <li>3D-схема арены и вид на лёд с места</li>
+        <li>Подбор мест рядом для компании</li>
+        <li>Корзина, оплата картой или СБП, билет</li>
+      </ul>
+      <span class="go"><i>→</i>Открыть витрину</span>
+    </a>
+    <a class="card admin" href="./cskaticket-admin-demo.html">
+      <span class="tag">Для команды</span>
+      <b>Админка</b>
+      <ul>
+        <li>Трафик, воронка, источники, устройства</li>
+        <li>Заказы с фильтрами и выгрузкой CSV</li>
+        <li>Сравнение витрин, роли, журнал</li>
+        <li>Светлая и тёмная тема</li>
+      </ul>
+      <span class="go"><i>→</i>Открыть админку</span>
+    </a>
+  </div>
+  <p class="note">Демо-макет для согласования. Логотип, фото арены, афиши и реквизиты продавца — заглушки до получения материалов и подтверждения прав. Сайт не является официальным сайтом клуба.</p>
+</main>
+</body>
+</html>

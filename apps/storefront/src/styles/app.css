@@ -11,7 +11,8 @@
 .site-header.scrolled { border-bottom-color: var(--border); background: color-mix(in srgb, var(--bg) 88%, transparent); }
 .header-inner { display: flex; align-items: center; gap: var(--space-5); min-height: 68px; }
 .brand { display: flex; align-items: center; gap: var(--space-3); text-decoration: none; }
-.logo-slot { width: 42px; height: 42px; font-size: 7.5px; padding: 2px; }
+.mark { width: 40px; height: 40px; flex: none; filter: drop-shadow(0 6px 14px rgba(228,32,46,.25)); transition: transform var(--dur-base) var(--ease); }
+.brand:hover .mark { transform: rotate(-6deg) scale(1.05); }
 .wordmark { font-size: 17px; letter-spacing: .03em; }
 .main-nav { display: none; gap: var(--space-5); margin-left: var(--space-4); }
 .main-nav a { position: relative; text-decoration: none; color: var(--text-muted); font-weight: 500; font-size: var(--text-sm); padding: 6px 0; }
@@ -201,7 +202,9 @@ body.has-selbar .legal-footer { padding-bottom: 140px; }
 .arena-facts { padding-left: 18px; color: var(--text-muted); display: grid; gap: var(--space-2); margin-bottom: var(--space-5); }
 .arena-facts b { color: var(--text); }
 .arena-photo { margin-top: var(--space-5); }
-.arena-photo .placeholder { min-height: 90px; }
+.arena-photo { position: relative; border-radius: var(--radius-md); overflow: hidden; aspect-ratio: 16 / 9; border: 1px solid var(--border); }
+.arena-photo svg { width: 100%; height: 100%; display: block; }
+.arena-photo figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 12px 8px; font-size: 11px; color: #C9D2E3; background: linear-gradient(transparent, rgba(3,6,14,.85)); }
 
 /* FAQ */
 .faq { display: grid; gap: var(--space-2); max-width: 860px; }

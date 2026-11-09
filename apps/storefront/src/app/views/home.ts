@@ -4,6 +4,13 @@ import { SITE, fmtDate, rub, matchTime, esc } from '../../lib/site';
 import { priceColorMap } from '../../lib/priceColors';
 import { rinkPath } from '../../lib/arena';
 import { reveal, tilt, splitText, countdown, iceSvg } from '../fx';
+import { renderSeatView } from '../seatview';
+
+const arenaView = () => {
+  const m = inventory.listMatches()[0];
+  const inv = new Map(inventory.getInventory(m.slug).map((s) => [s.id, s]));
+  return renderSeatView(arena(), inv, { sector: '101', row: 6, seat: 8 });
+};
 
 const FAQ: [string, string][] = [
   ['Как купить билет?', 'Выберите матч, укажите, сколько вас и какой бюджет, — схема сразу покажет подходящие места рядом. Добавьте их в корзину, оставьте контакты и оплатите картой или через СБП.'],
@@ -144,7 +151,7 @@ export function homeView(): View {
           <li><b>Места для МГН</b> отмечены на схеме отдельным цветом.</li>
         </ul>
         <a class="btn btn-secondary" href="#/match/${next.slug}">Открыть схему арены</a>
-        <div class="arena-photo">${'' /* слот фото арены */}<div class="placeholder" title="RIGHTS-001: ждём фото арены"><span>фото арены от партнёра<br><b>RIGHTS-001</b></span></div></div>
+        <figure class="arena-photo">${arenaView()}<figcaption>Вид с центральной трибуны — смоделирован по схеме. Фото арены от партнёра встанет сюда (RIGHTS-001).</figcaption></figure>
       </div>
     </div>
   </section>
