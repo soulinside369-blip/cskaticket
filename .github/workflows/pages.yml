@@ -1,10 +1,10 @@
 # Публикация макета на GitHub Pages: собирает один HTML-файл и выкладывает его как index.html.
-# Включить: Settings → Pages → Source: GitHub Actions.
+# ВЫКЛЮЧЕНО по решению заказчика (2026-11-09): никакой публичности до подтверждения прав (RIGHTS-001).
+# Pages-сайт открыт всем по ссылке даже у закрытого репозитория. Запуск — только вручную и только
+# после письменного согласия партнёра; тогда же включить Settings → Pages → Source: GitHub Actions.
 name: Pages
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
