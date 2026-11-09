@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "storefront",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "-w", "@platform/storefront", "--", "--port", "4321"],
+      "port": 4321
+    }
+  ]
+}

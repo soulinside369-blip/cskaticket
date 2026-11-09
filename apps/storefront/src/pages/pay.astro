@@ -1,0 +1,56 @@
+---
+// Имитация страницы платёжного провайдера. В проде здесь редирект/виджет ЮKassa, CloudPayments,
+// Т-Банк или Robokassa (адаптеры PaymentProvider в apps/api); статус приходит вебхуком.
+import Base from '../layouts/Base.astro';
+import { SITE } from '../lib/site';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+<Base title={`Оплата — ${SITE.name}`}>
+  <section class="container pay">
+    <div class="card provider">
+      <p class="eyebrow">Демо · страница платёжного провайдера</p>
+      <h1 class="display title">Оплата заказа</h1>
+      <p class="sum num" data-sum></p>
+      <div class="method-card" data-method-card></div>
+      <p class="note">В реальном заказе здесь откроется форма или QR провайдера. В макете деньги не списываются.</p>
+      <div class="actions">
+        <button class="btn btn-primary btn-lg" data-pay>Оплатить (демо)</button>
+        <a class="btn btn-ghost btn-lg" href={`${base}cart/`}>Вернуться</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { readCart, track } from '../lib/cart';
+  const base = document.body.dataset.base || '/';
+  const method = new URLSearchParams(location.search).get('method') === 'sbp' ? 'sbp' : 'card';
+  const cart = readCart();
+  if (!cart.items.length) location.href = `${base}cart/`;
+  const total = cart.items.reduce((a, x) => a + x.price, 0);
+  document.querySelector('[data-sum]')!.textContent = `К оплате: ${total.toLocaleString('ru-RU')} ₽`;
+  document.querySelector('[data-method-card]')!.innerHTML = method === 'sbp'
+    ? '<b>СБП</b><span>Отсканируйте QR-код в приложении банка</span><div class="qr" aria-hidden="true"></div>'
+    : '<b>Банковская карта</b><span>Поля карты показывает провайдер — наш сайт их не видит</span>';
+  document.querySelector('[data-pay]')!.addEventListener('click', () => {
+    const id = 'CT-' + Date.now().toString(36).toUpperCase().slice(-6);
+    try { sessionStorage.setItem('cskaticket:last-order', JSON.stringify({ id, items: cart.items, total, method })); } catch {}
+    track('paid', { order: id, total, method });
+    location.href = `${base}order/`;
+  });
+</script>
+
+<style>
+  .pay { margin-top: var(--space-7); display: grid; place-items: center; }
+  .provider { width: 100%; max-width: 520px; padding: var(--space-6); background: #fff; color: #11151C; border-color: #E2E5EB; }
+  .provider .eyebrow { color: #5D6576; }
+  .title { font-size: var(--text-2xl); margin: var(--space-2) 0; }
+  .sum { font-size: var(--text-xl); font-weight: 700; }
+  .method-card :global(b) { display: block; }
+  .method-card { display: grid; gap: 4px; padding: var(--space-4); border: 1px solid #E2E5EB; border-radius: var(--radius-md); font-size: var(--text-sm); color: #5D6576; }
+  .method-card :global(.qr) { width: 140px; height: 140px; margin-top: var(--space-3); background:
+    conic-gradient(#11151C 25%, #fff 0 50%, #11151C 0 75%, #fff 0) 0 0 / 20px 20px; border: 8px solid #fff; outline: 1px solid #E2E5EB; }
+  .note { font-size: var(--text-xs); color: #5D6576; }
+  .actions { display: flex; gap: var(--space-3); flex-wrap: wrap; }
+  .actions .btn-ghost { color: #11151C; border-color: #C9CED8; }
+</style>

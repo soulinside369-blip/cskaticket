@@ -1,0 +1,117 @@
+---
+import '../styles/global.css';
+import RightsSlot from '../components/RightsSlot.astro';
+import { SITE, THEME, PRESET } from '../lib/site';
+interface Props { title: string; description?: string; jsonld?: object }
+const { title, description = SITE.tagline, jsonld } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const s = SITE.seller;
+---
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" /><!-- макет: RIGHTS-001 только для внутреннего показа -->
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Unbounded:wght@500;700;800&display=swap" rel="stylesheet" />
+  <style set:html={THEME.css}></style>
+  {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)}></script>}
+</head>
+<body data-site={SITE.id} data-base={base}>
+  <div class="demo-bar" role="note">
+    Демо-макет для согласования · данные о матчах, местах и ценах тестовые · оплата не проводится
+  </div>
+
+  <!-- SellerBar: фиксированный блок продавца (DESIGN.md §5) -->
+  <div class="seller-bar">
+    <div class="container seller-inner">
+      <span>Продавец: <b>{s.legalName}</b>, ИНН {s.inn}</span>
+      <nav aria-label="Документы продавца">
+        <a href={`${base}legal/#offer`}>Оферта</a>
+        <a href={`${base}legal/#refund`}>Возврат</a>
+        <a href={`${base}legal/#contacts`}>Контакты</a>
+      </nav>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href={base} aria-label={`${SITE.name} — на главную`}>
+        <RightsSlot slot={PRESET.slots.logo} label="логотип" class="logo-slot" />
+        <span class="wordmark display">{SITE.name}</span>
+      </a>
+      <nav class="main-nav" aria-label="Основное меню">
+        <a href={`${base}#afisha`}>Афиша</a>
+        <a href={`${base}#arena`}>Арена</a>
+        <a href={`${base}#faq`}>Вопросы</a>
+      </nav>
+      <a class="cart-link btn btn-secondary" href={`${base}cart/`}>
+        Корзина <span class="cart-count num" data-cart-count>0</span>
+      </a>
+    </div>
+  </header>
+
+  <main><slot /></main>
+
+  <!-- LegalFooter: фиксированные цвета, тема не переопределяет -->
+  <footer class="legal-footer">
+    <div class="container footer-grid">
+      <div>
+        <div class="display footer-name">{SITE.name}</div>
+        <p class="disclaimer">{SITE.disclaimer}</p>
+        <p class="disclaimer">Итоговая цена билета включает стоимость услуг билетного сервиса; раскладка показана до оплаты.</p>
+      </div>
+      <div id="contacts">
+        <h2>Продавец</h2>
+        <p>{s.legalName}<br />ИНН {s.inn} · ОГРН {s.ogrn}<br />{s.address}<br />{s.email} · {s.phone}</p>
+      </div>
+      <div>
+        <h2>Документы</h2>
+        <p><a href={`${base}legal/#offer`}>Публичная оферта</a><br /><a href={`${base}legal/#refund`}>Условия возврата</a><br /><a href={`${base}legal/#privacy`}>Политика обработки ПДн</a></p>
+        <p class="pay-note">Оплата — через лицензированного платёжного провайдера: банковские карты, СБП. Данные карт не хранятся на сайте.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    import { cartCount } from '../lib/cart';
+    const el = document.querySelector('[data-cart-count]');
+    const sync = () => { if (el) el.textContent = String(cartCount()); };
+    sync();
+    window.addEventListener('cart:change', sync);
+    window.addEventListener('storage', sync);
+  </script>
+</body>
+</html>
+
+<style>
+  .demo-bar { background: #F2B33D; color: #1A1406; font-size: var(--text-xs); font-weight: 600; text-align: center; padding: 6px var(--gutter); }
+  .seller-bar { background: var(--legal-bg); color: var(--legal-text); font-size: var(--text-xs); }
+  .seller-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; padding-top: 6px; padding-bottom: 6px; }
+  .seller-inner nav { display: flex; gap: 14px; }
+  .seller-inner a { color: var(--legal-text); }
+  .site-header { position: sticky; top: 0; z-index: var(--z-header); background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+  .header-inner { display: flex; align-items: center; gap: var(--space-5); min-height: 68px; }
+  .brand { display: flex; align-items: center; gap: var(--space-3); text-decoration: none; }
+  .brand :global(.logo-slot) { width: 44px; height: 44px; font-size: 8px; padding: 2px; }
+  .wordmark { font-size: 18px; letter-spacing: .02em; }
+  .main-nav { display: none; gap: var(--space-5); margin-left: var(--space-4); }
+  .main-nav a { text-decoration: none; color: var(--text-muted); font-weight: 500; font-size: var(--text-sm); }
+  .main-nav a:hover { color: var(--text); }
+  .cart-link { margin-left: auto; min-height: 40px; padding: 0 14px; }
+  .cart-count { background: var(--accent); color: var(--on-accent); border-radius: 999px; min-width: 22px; height: 22px; display: inline-grid; place-items: center; font-size: 12px; padding: 0 6px; }
+  @media (min-width: 768px) { .main-nav { display: flex; } }
+
+  .legal-footer { background: var(--legal-bg); color: var(--legal-text); margin-top: var(--space-9); padding: var(--space-7) 0; font-size: var(--text-sm); }
+  .footer-grid { display: grid; gap: var(--space-6); }
+  @media (min-width: 900px) { .footer-grid { grid-template-columns: 1.4fr 1fr 1fr; } }
+  .footer-name { font-size: 20px; margin-bottom: var(--space-3); }
+  .legal-footer h2 { font-size: var(--text-sm); text-transform: uppercase; letter-spacing: .1em; margin: 0 0 var(--space-3); color: var(--legal-muted); }
+  .legal-footer p { margin: 0 0 var(--space-3); }
+  .disclaimer, .pay-note { color: var(--legal-muted); max-width: 52ch; }
+  .legal-footer a { color: var(--legal-text); }
+</style>

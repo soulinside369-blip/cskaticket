@@ -1,0 +1,18 @@
+{
+  "id": "cska",
+  "mode": "dark",
+  "colors": {
+    "brand": "#1A3A8F",
+    "accent": "#E4202E",
+    "bg": "#070D1C",
+    "surface": "#0F1830"
+  },
+  "shape": "sharp",
+  "font": { "display": "Unbounded", "displayWeight": 700, "displayCase": "upper" },
+  "pattern": { "kind": "ice", "intensity": 0.35 },
+  "slots": {
+    "logo": "rights:RIGHTS-001/logo",
+    "banner": "rights:RIGHTS-001/poster",
+    "venuePhoto": "rights:RIGHTS-001/arena-photo"
+  }
+}

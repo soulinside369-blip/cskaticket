@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../lib/site';
+const s = SITE.seller;
+---
+<Base title={`Документы продавца — ${SITE.name}`}>
+  <section class="container legal">
+    <h1 class="display title">Документы продавца</h1>
+    <p class="muted">Тексты документов будут предоставлены продавцом. Ниже — структура и заглушки.</p>
+
+    <article id="offer" class="card doc"><h2>Публичная оферта</h2><p>[Текст оферты продавца: предмет, порядок оформления заказа, цена и состав услуг сервиса, ответственность сторон.]</p></article>
+    <article id="refund" class="card doc"><h2>Условия возврата</h2><p>[Порядок и сроки возврата билетов, возврат при отмене и переносе мероприятия, возврат стоимости услуг сервиса.]</p></article>
+    <article id="privacy" class="card doc"><h2>Политика обработки персональных данных</h2><p>[Оператор ПДн, цели и состав данных, сроки хранения, права субъекта. Данные хранятся на серверах в РФ (152-ФЗ).]</p></article>
+    <article id="contacts" class="card doc"><h2>Реквизиты и контакты</h2>
+      <p>{s.legalName}<br />ИНН {s.inn}, ОГРН {s.ogrn}<br />{s.address}<br />{s.email} · {s.phone}</p>
+      <p class="muted">{SITE.disclaimer}</p>
+    </article>
+  </section>
+</Base>
+<style>
+  .legal { margin-top: var(--space-6); display: grid; gap: var(--space-4); max-width: 860px; }
+  .title { font-size: var(--text-3xl); margin: 0; }
+  .muted { color: var(--text-muted); }
+  .doc { padding: var(--space-5); }
+  .doc h2 { margin-top: 0; font-size: var(--text-lg); }
+</style>

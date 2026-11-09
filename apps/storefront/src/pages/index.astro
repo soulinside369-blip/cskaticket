@@ -1,0 +1,184 @@
+---
+import Base from '../layouts/Base.astro';
+import IcePattern from '../components/IcePattern.astro';
+import RightsSlot from '../components/RightsSlot.astro';
+import { inventory, minPrice, totalFree } from '../lib/inventory';
+import { SITE, PRESET, fmtDate, rub } from '../lib/site';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const matches = inventory.listMatches().map((m) => {
+  const inv = inventory.getInventory(m.slug);
+  return { ...m, from: minPrice(inv), free: totalFree(inv), d: fmtDate(m.date) };
+});
+const next = matches[0];
+const faq = [
+  ['Как купить билет?', 'Выберите матч, укажите, сколько вас и какой бюджет, — схема сразу покажет подходящие места. Добавьте их в корзину, заполните контакты и оплатите картой или через СБП.'],
+  ['Куда придёт билет?', 'Электронный билет придёт на email, указанный при оформлении. Распечатывать не нужно — достаточно показать QR-код с телефона.'],
+  ['Почему цена может отличаться от номинала?', 'Итоговая цена включает стоимость услуг билетного сервиса. Раскладка «билет + сервис» показывается при выборе места и в корзине — до оплаты.'],
+  ['Что будет при отмене или переносе матча?', 'При отмене — возврат полной стоимости. При переносе билет действует на новую дату, либо его можно вернуть по условиям возврата.'],
+  ['Кто продаёт билеты?', `Продавец — ${SITE.seller.legalName}, его реквизиты указаны вверху каждой страницы и в подвале. Сайт не является официальным сайтом клуба.`],
+];
+---
+<Base title={`${SITE.name} — ${SITE.tagline}`}>
+  <!-- HERO: ближайший матч -->
+  <section class="hero">
+    <IcePattern seed={11} />
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Ближайший домашний матч</p>
+        <h1 class="display hero-title">ЦСКА <span class="vs">—</span> {next.opponent}</h1>
+        <p class="hero-meta num">{next.d.day} {next.d.month}, {next.d.wdFull} · {next.d.time} · {SITE.venue.name}</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary btn-lg" href={`${base}match/${next.slug}/`}>Выбрать места{next.from && <span class="num">· от {rub(next.from)}</span>}</a>
+          <a class="btn btn-ghost btn-lg" href="#afisha">Все матчи</a>
+        </div>
+        <ol class="steps">
+          <li><b>1</b> Матч</li>
+          <li><b>2</b> Сколько вас и бюджет — места сразу на схеме</li>
+          <li><b>3</b> Оплата картой или СБП</li>
+        </ol>
+      </div>
+      <RightsSlot slot={PRESET.slots.banner} label="афиша матча от партнёра" class="hero-poster" />
+    </div>
+  </section>
+
+  <!-- АФИША -->
+  <section class="container afisha" id="afisha">
+    <div class="section-head">
+      <h2 class="display section-title">Афиша</h2>
+      <div class="filters" role="group" aria-label="Фильтр матчей">
+        <button class="chip" aria-pressed="true" data-filter="all">Все матчи</button>
+        <button class="chip" aria-pressed="false" data-filter="weekend">Выходные</button>
+        <button class="chip" aria-pressed="false" data-filter="nov">Ноябрь</button>
+        <button class="chip" aria-pressed="false" data-filter="dec">Декабрь</button>
+        <button class="chip" aria-pressed="false" data-filter="budget">До 2 000 ₽</button>
+      </div>
+    </div>
+
+    <ul class="match-grid" role="list">
+      {matches.map((m) => (
+        <li class="match-card card" data-weekend={String(m.d.weekend)} data-month={m.date.slice(5, 7)} data-from={m.from ?? 0}>
+          <a class="match-link" href={`${base}match/${m.slug}/`}>
+            <div class="mc-date">
+              <span class="mc-day display num">{m.d.day}</span>
+              <span class="mc-month">{m.d.monthShort} · {m.d.wd}</span>
+              <span class="mc-time num">{m.d.time}</span>
+            </div>
+            <div class="mc-body">
+              <span class="mc-tour">{m.tournament}</span>
+              <span class="mc-teams display">ЦСКА — {m.opponent}</span>
+              <span class="mc-city">{m.opponentCity}</span>
+            </div>
+            <div class="mc-buy">
+              {m.from ? <span class="mc-price num">от {rub(m.from)}</span> : <span class="mc-price">Нет мест</span>}
+              <span class="mc-avail">{m.free > 300 ? 'Есть места' : m.free > 0 ? 'Мало мест' : 'Продано'}</span>
+              <span class="btn btn-primary mc-btn">Выбрать места</span>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="empty" hidden data-empty>По этому фильтру матчей нет — попробуйте другой.</p>
+  </section>
+
+  <!-- АРЕНА -->
+  <section class="container arena-sec" id="arena">
+    <div class="arena-card card">
+      <RightsSlot slot={PRESET.slots.venuePhoto} label="фото арены от партнёра" class="arena-photo" />
+      <div class="arena-copy">
+        <p class="eyebrow">Арена</p>
+        <h2 class="display section-title">{SITE.venue.name}</h2>
+        <p class="muted">{SITE.venue.address}</p>
+        <ul class="arena-facts">
+          <li><b>За 1,5 часа</b> открываются входы — приходите заранее, чтобы спокойно найти сектор.</li>
+          <li><b>Номер входа</b> указан в билете рядом с сектором.</li>
+          <li><b>Места для МГН</b> отмечены на схеме отдельным значком.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="container faq" id="faq">
+    <h2 class="display section-title">Вопросы</h2>
+    <div class="faq-list">
+      {faq.map(([q, a]) => (
+        <details class="faq-item">
+          <summary>{q}</summary>
+          <p>{a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { track } from '../lib/cart';
+  track('visit', { utm: Object.fromEntries(new URLSearchParams(location.search)) });
+  const chips = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const cards = document.querySelectorAll<HTMLElement>('.match-card');
+  const empty = document.querySelector<HTMLElement>('[data-empty]')!;
+  chips.forEach((chip) => chip.addEventListener('click', () => {
+    chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+    const f = chip.dataset.filter;
+    let shown = 0;
+    cards.forEach((card) => {
+      const ok = f === 'all' || (f === 'weekend' && card.dataset.weekend === 'true') ||
+        (f === 'nov' && card.dataset.month === '11') || (f === 'dec' && card.dataset.month === '12') ||
+        (f === 'budget' && Number(card.dataset.from) > 0 && Number(card.dataset.from) <= 2000);
+      card.hidden = !ok;
+      if (ok) shown++;
+    });
+    empty.hidden = shown > 0;
+  }));
+</script>
+
+<style>
+  .hero { position: relative; overflow: hidden; background: linear-gradient(160deg, var(--brand) -40%, var(--bg) 60%); border-bottom: 1px solid var(--border); }
+  .hero-grid { position: relative; display: grid; gap: var(--space-6); padding-top: var(--space-8); padding-bottom: var(--space-8); align-items: center; }
+  @media (min-width: 960px) { .hero-grid { grid-template-columns: 1.35fr 1fr; } }
+  .hero-title { font-size: var(--text-4xl); margin: var(--space-3) 0 var(--space-4); }
+  .vs { color: var(--accent); }
+  .hero-meta { color: var(--text-muted); font-size: var(--text-lg); margin: 0 0 var(--space-6); }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+  .steps { list-style: none; padding: 0; margin: var(--space-6) 0 0; display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-5); color: var(--text-muted); font-size: var(--text-sm); }
+  .steps b { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--border-strong); margin-right: 6px; font-size: 12px; color: var(--text); }
+  :global(.hero-poster) { aspect-ratio: 4 / 5; max-height: 440px; width: 100%; background-color: color-mix(in srgb, var(--surface) 70%, transparent) !important; }
+
+  .afisha, .arena-sec, .faq { margin-top: var(--space-8); }
+  .section-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-5); }
+  .section-title { font-size: var(--text-3xl); margin: 0; }
+  .filters { display: flex; gap: var(--space-2); overflow-x: auto; max-width: 100%; padding-bottom: 2px; }
+  .match-grid { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-3); }
+  .match-link { display: grid; grid-template-columns: 76px 1fr; gap: var(--space-4); padding: var(--space-4); text-decoration: none; align-items: center; }
+  @media (min-width: 760px) { .match-link { grid-template-columns: 96px 1fr auto; padding: var(--space-4) var(--space-5); } }
+  .match-card { transition: border-color var(--dur-base) var(--ease), transform var(--dur-base) var(--ease); }
+  .match-card:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+  .mc-date { display: grid; justify-items: start; border-right: 1px solid var(--border); padding-right: var(--space-3); }
+  .mc-day { font-size: 34px; }
+  .mc-month, .mc-time { font-size: var(--text-xs); color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; }
+  .mc-time { color: var(--text); font-weight: 600; }
+  .mc-body { display: grid; gap: 2px; min-width: 0; }
+  .mc-tour { font-size: var(--text-xs); color: var(--text-muted); }
+  .mc-teams { font-size: clamp(16px, 2.2vw, 22px); }
+  .mc-city { font-size: var(--text-sm); color: var(--text-muted); }
+  .mc-buy { grid-column: 1 / -1; display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
+  @media (min-width: 760px) { .mc-buy { grid-column: auto; justify-content: end; } }
+  .mc-price { font-weight: 700; font-size: var(--text-lg); }
+  .mc-avail { font-size: var(--text-xs); color: var(--text-muted); }
+  .mc-btn { margin-left: auto; }
+  .empty { color: var(--text-muted); }
+
+  .arena-card { display: grid; overflow: hidden; }
+  @media (min-width: 900px) { .arena-card { grid-template-columns: 1fr 1fr; } }
+  :global(.arena-photo) { min-height: 260px; border-radius: 0 !important; border-width: 0 1px 0 0 !important; }
+  .arena-copy { padding: var(--space-6); }
+  .muted { color: var(--text-muted); }
+  .arena-facts { padding-left: 18px; color: var(--text-muted); display: grid; gap: var(--space-2); }
+  .arena-facts b { color: var(--text); }
+
+  .faq-list { margin-top: var(--space-5); display: grid; gap: var(--space-2); max-width: 820px; }
+  .faq-item { border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface); }
+  .faq-item summary { cursor: pointer; padding: var(--space-4) var(--space-5); font-weight: 600; }
+  .faq-item p { margin: 0; padding: 0 var(--space-5) var(--space-4); color: var(--text-muted); }
+</style>
