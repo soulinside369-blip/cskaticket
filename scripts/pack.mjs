@@ -1,12 +1,14 @@
 // Собирает макет в ОДИН самодостаточный HTML-файл (стили и скрипты внутри).
 // Файл открывается двойным кликом (file://) и он же публикуется на GitHub Pages.
-// Запуск: npm run release
+// Запуск: npm run release (витрина) / node scripts/pack.mjs admin (админка)
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const dist = join(root, 'apps/storefront/dist');
+const app = process.argv[2] === 'admin' ? 'admin' : 'storefront';
+const outName = app === 'admin' ? 'cskaticket-admin-demo.html' : 'cskaticket-demo.html';
+const dist = join(root, `apps/${app}/dist`);
 let html = readFileSync(join(dist, 'index.html'), 'utf8');
 
 const read = (href) => {
@@ -24,5 +26,5 @@ if (left) throw new Error(`Остались внешние ссылки на с�
 
 const out = join(root, 'release');
 mkdirSync(out, { recursive: true });
-writeFileSync(join(out, 'cskaticket-demo.html'), html);
-console.log(`release/cskaticket-demo.html — ${(Buffer.byteLength(html) / 1024).toFixed(0)} КБ`);
+writeFileSync(join(out, outName), html);
+console.log(`release/${outName} — ${(Buffer.byteLength(html) / 1024).toFixed(0)} КБ`);

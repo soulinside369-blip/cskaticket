@@ -1,0 +1,45 @@
+---
+import '../admin.css';
+---
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Админка — CSKATICKET</title>
+</head>
+<body>
+  <div class="demo">Макет админки · все цифры — демо-данные, сгенерированные для показа</div>
+  <header class="top">
+    <div class="wrap top-in">
+      <div class="brand"><b>CSKATICKET</b><span>Бэк-офис платформы</span></div>
+      <nav class="tabs" role="tablist" aria-label="Разделы">
+        <button role="tab" aria-selected="true" data-tab="dash">Дашборд</button>
+        <button role="tab" aria-selected="false" data-tab="orders">Заказы</button>
+        <button role="tab" aria-selected="false" data-tab="sites">Витрины</button>
+        <button role="tab" aria-selected="false" data-tab="log">Журнал</button>
+      </nav>
+      <div class="top-r">
+        <label class="ctl"><span>Роль</span>
+          <select id="role"><option value="owner">Владелец</option><option value="manager">Менеджер</option><option value="analyst">Аналитик</option></select>
+        </label>
+        <button class="theme" id="theme" aria-label="Переключить тему">◐</button>
+      </div>
+    </div>
+  </header>
+  <div class="wrap filters" role="group" aria-label="Фильтры">
+    <div class="seg" role="radiogroup" aria-label="Период">
+      <button role="radio" aria-checked="false" data-period="7">7 дней</button>
+      <button role="radio" aria-checked="true" data-period="30">30 дней</button>
+      <button role="radio" aria-checked="false" data-period="90">90 дней</button>
+    </div>
+    <label class="ctl"><span>Витрина</span>
+      <select id="site"><option value="all">Все витрины</option></select>
+    </label>
+    <span class="range num" id="range"></span>
+  </div>
+  <main class="wrap" id="view"></main>
+  <script>import '../admin';</script>
+</body>
+</html>

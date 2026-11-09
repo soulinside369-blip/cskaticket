@@ -4,8 +4,27 @@
     {
       "name": "storefront",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "-w", "@platform/storefront", "--", "--port", "4321"],
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "-w",
+        "@platform/storefront",
+        "--",
+        "--port",
+        "4321"
+      ],
       "port": 4321
+    },
+    {
+      "name": "admin",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "-w",
+        "@platform/admin"
+      ],
+      "port": 4322
     }
   ]
 }
