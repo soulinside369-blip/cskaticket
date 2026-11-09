@@ -96,6 +96,7 @@ export function homeView(): View {
           <a class="btn btn-primary btn-lg shine" href="#/match/${next.slug}">Выбрать места${next.from ? ` <span class="num">· от ${rub(next.from)}</span>` : ''}</a>
           <a class="btn btn-ghost btn-lg" href="#/?to=afisha">Все матчи</a>
         </div>
+        <button class="replay" type="button" data-replay><i aria-hidden="true">▶</i>Смотреть анонс матча</button>
       </div>
       <div class="hero-poster">${poster(next.opponent, nd)}</div>
     </div>

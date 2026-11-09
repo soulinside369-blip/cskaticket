@@ -1,6 +1,7 @@
 // Роутер макета: hash-маршруты (работают и с file://, и на GitHub Pages) + View Transitions.
 import { cartCount } from '../lib/cart';
 import { reduced } from './fx';
+import { playIntro } from './intro';
 import { homeView } from './views/home';
 import { matchView } from './views/match';
 import { cartView } from './views/cart';
@@ -25,6 +26,7 @@ const routes: Route[] = [
 ];
 
 const app = document.getElementById('app')!;
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 let cleanup: (() => void) | void;
 let lastPath = '';
 
@@ -89,3 +91,8 @@ onScroll();
 
 window.addEventListener('hashchange', () => render());
 render(true);
+playIntro(parse().path);
+// повтор анонса (кнопка в герое)
+document.addEventListener('click', (e) => {
+  if ((e.target as Element).closest('[data-replay]')) playIntro(parse().path, { force: true });
+});

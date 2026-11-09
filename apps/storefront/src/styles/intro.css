@@ -1,0 +1,83 @@
+/* Анонс-заставка в стиле спортивного эфира. Таймлайн ~4,6 с:
+   0.0 полосы-«шторка» → 0.6 «ЦСКА» влетает слева → 0.75 соперник справа → 0.95 удар «×», кольцо, искры
+   → 1.4 шайба → 2.2 дата → 2.9 «билеты в продаже» → 3.95 уход шторкой. */
+.intro { position: fixed; inset: 0; z-index: 1000; overflow: hidden; background: #03060E; color: #fff; cursor: pointer; display: grid; place-items: center; }
+.intro-ice { position: absolute; inset: 0; opacity: 0; animation: introIce 4.6s cubic-bezier(.2,.8,.2,1) .15s forwards; }
+.intro-ice .ice { opacity: .9; }
+@keyframes introIce { 0% { opacity: 0; transform: scale(1.25); } 15% { opacity: 1; } 100% { opacity: 1; transform: scale(1); } }
+.intro-glow { position: absolute; inset: 0; background: radial-gradient(60% 50% at 50% 46%, rgba(26,58,143,.85), transparent 70%), radial-gradient(30% 30% at 50% 46%, rgba(228,32,46,.35), transparent 70%); opacity: 0; animation: introGlow .5s ease .9s forwards; }
+@keyframes introGlow { 0% { opacity: 0; filter: brightness(3); } 40% { opacity: 1; filter: brightness(2.2); } 100% { opacity: 1; filter: none; } }
+.intro-beam { position: absolute; top: -20%; left: -40%; width: 40%; height: 140%; background: linear-gradient(90deg, transparent, rgba(190,215,255,.22), transparent); transform: skewX(-18deg); filter: blur(8px); animation: introBeam 1.3s cubic-bezier(.4,0,.2,1) 2s forwards; }
+@keyframes introBeam { to { left: 120%; } }
+.intro-fx { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+
+.intro-stage { position: relative; width: min(1200px, 92vw); text-align: center; animation: introShake .32s linear .95s 1, introPush 2.6s ease-out 1.2s forwards; }
+@keyframes introShake { 20% { transform: translate(-8px, 4px); } 40% { transform: translate(7px, -5px); } 60% { transform: translate(-5px, 3px); } 80% { transform: translate(3px, -2px); } }
+@keyframes introPush { to { scale: 1.04; } }
+.intro-kicker { font: 700 clamp(11px, 1.3vw, 15px) var(--font-text); text-transform: uppercase; letter-spacing: .6em; color: #AFC4EA; opacity: 0; animation: introKicker .7s cubic-bezier(.2,.8,.2,1) .4s forwards; }
+@keyframes introKicker { to { opacity: 1; letter-spacing: .24em; } }
+.intro-teams { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 0; margin-top: .25em; font: 900 clamp(44px, min(10vw, 15vh), 150px)/.88 var(--font-display); text-transform: uppercase; letter-spacing: -.02em; animation: introLift .6s cubic-bezier(.2,.8,.2,1) 2.15s forwards; }
+@keyframes introLift { to { transform: translateY(-.1em) scale(.84); } }
+.it-home, .it-away { display: inline-block; opacity: 0; }
+.it-home { animation: slamL .38s cubic-bezier(.2,1.1,.3,1) .6s forwards; }
+.it-away { animation: slamR .38s cubic-bezier(.2,1.1,.3,1) .76s forwards; font-size: min(1em, calc(1em * 9 / var(--len, 6))); }
+@keyframes slamL { from { opacity: 1; transform: translateX(-70vw) skewX(-18deg); filter: blur(14px); } 70% { transform: translateX(2vw) skewX(6deg); filter: blur(0); } to { opacity: 1; transform: none; } }
+@keyframes slamR { from { opacity: 1; transform: translateX(70vw) skewX(18deg); filter: blur(14px); } 70% { transform: translateX(-2vw) skewX(-6deg); filter: blur(0); } to { opacity: 1; transform: none; } }
+.it-x { display: inline-block; color: #E4202E; opacity: 0; font-size: .42em; margin: .08em 0; text-shadow: 0 0 40px rgba(228,32,46,.9); animation: introX .45s cubic-bezier(.2,1.4,.4,1) .92s forwards; }
+@keyframes introX { from { opacity: 0; transform: scale(3.5) rotate(-30deg); } to { opacity: 1; transform: none; } }
+.intro-ring { position: absolute; left: 50%; top: 52%; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%; border: 3px solid rgba(255,255,255,.8); opacity: 0; animation: introRing .8s cubic-bezier(.1,.8,.3,1) .95s forwards; pointer-events: none; }
+@keyframes introRing { 0% { opacity: 1; transform: scale(.2); } 100% { opacity: 0; transform: scale(9); border-width: 1px; } }
+
+.intro-meta { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 18px 48px; margin-top: -.2em; }
+.intro-date { display: flex; align-items: center; gap: 14px; opacity: 0; animation: introUp .55s cubic-bezier(.2,.9,.2,1) 2.3s forwards; }
+.intro-date b { font: 900 clamp(56px, 8vw, 110px)/.8 var(--font-display); color: #FFD43B; text-shadow: 0 0 30px rgba(255,212,59,.5); }
+.intro-date span { text-align: left; font: 700 clamp(13px, 1.5vw, 18px)/1.3 var(--font-display); text-transform: uppercase; letter-spacing: .06em; }
+.intro-cta { display: grid; justify-items: start; gap: 4px; padding: 12px 22px; border-left: 4px solid #E4202E; background: linear-gradient(90deg, rgba(228,32,46,.22), transparent); opacity: 0; animation: introCta .55s cubic-bezier(.2,.9,.2,1) 2.85s forwards; }
+.intro-cta span { font: 800 clamp(14px, 1.7vw, 20px) var(--font-display); text-transform: uppercase; letter-spacing: .08em; }
+.intro-cta em { font: 600 clamp(14px, 1.5vw, 18px) var(--font-text); font-style: normal; color: #C9D6EE; }
+@keyframes introUp { from { opacity: 0; transform: translateY(30px); filter: blur(6px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes introCta { from { opacity: 0; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
+
+.intro-puck { position: absolute; left: -10%; top: 74%; width: 46px; height: 20px; border-radius: 50%; background: radial-gradient(circle at 50% 30%, #3a3f4b, #050608 70%); box-shadow: -60px 0 30px -10px rgba(220,232,255,.35), -140px 0 50px -20px rgba(220,232,255,.18); animation: introPuck .75s cubic-bezier(.5,0,.3,1) 1.35s forwards; opacity: 0; }
+@keyframes introPuck { 0% { opacity: 1; left: -10%; top: 80%; } 100% { opacity: 1; left: 115%; top: 62%; } }
+
+/* шторка на входе: диагональные полосы клубных цветов */
+.intro-stripes, .intro-wipe { position: absolute; inset: 0; pointer-events: none; }
+.intro-stripes i, .intro-wipe i { position: absolute; top: -20%; height: 140%; width: 34%; transform: skewX(-20deg) translateX(-220vw); }
+.intro-stripes i { animation: stripeIn .62s cubic-bezier(.7,0,.2,1) forwards; }
+.intro-stripes i:nth-child(1) { left: -10%; background: #E4202E; animation-delay: 0s; }
+.intro-stripes i:nth-child(2) { left: 18%; background: #1A3A8F; animation-delay: .06s; }
+.intro-stripes i:nth-child(3) { left: 46%; background: #F2F6FF; width: 8%; animation-delay: .12s; }
+.intro-stripes i:nth-child(4) { left: 62%; background: #E4202E; animation-delay: .16s; }
+@keyframes stripeIn { 0% { transform: skewX(-20deg) translateX(-160vw); } 100% { transform: skewX(-20deg) translateX(200vw); } }
+.intro-wipe i:nth-child(1) { left: -5%; width: 50%; background: #1A3A8F; }
+.intro-wipe i:nth-child(2) { left: 30%; width: 40%; background: #E4202E; }
+.intro-wipe i:nth-child(3) { left: 60%; width: 55%; background: #070D1C; }
+.intro.out .intro-wipe i { animation: wipe .6s cubic-bezier(.7,0,.2,1) forwards; }
+.intro.out .intro-wipe i:nth-child(2) { animation-delay: .05s; }
+.intro.out .intro-wipe i:nth-child(3) { animation-delay: .1s; }
+@keyframes wipe { 0% { transform: skewX(-20deg) translateX(-160vw); } 100% { transform: skewX(-20deg) translateX(200vw); } }
+.intro.out { animation: introOut .65s ease forwards; pointer-events: none; }
+.intro.out .intro-stage { animation: none; transition: transform .5s cubic-bezier(.7,0,.2,1), opacity .4s; transform: scale(1.25); opacity: 0; }
+@keyframes introOut { 0%, 45% { background-color: #03060E; opacity: 1; } 100% { background-color: transparent; opacity: 0; } }
+.intro.out.fast, .intro.out.fast .intro-wipe i { animation-duration: .38s; }
+
+.intro-grain { position: absolute; inset: 0; pointer-events: none; opacity: .08; background: repeating-linear-gradient(0deg, rgba(255,255,255,.5) 0 1px, transparent 1px 3px); mix-blend-mode: overlay; }
+.intro::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(0,0,0,.7)); }
+.intro-bug { position: absolute; left: clamp(16px, 3vw, 36px); top: clamp(16px, 3vw, 32px); z-index: 2; display: flex; align-items: center; gap: 10px; font: 800 13px var(--font-display); letter-spacing: .06em; opacity: 0; animation: introUp .4s ease .5s forwards; }
+.intro-bug span { font: 700 10px var(--font-text); text-transform: uppercase; letter-spacing: .2em; padding: 3px 8px; border-radius: 3px; background: #E4202E; }
+.intro-skip { position: absolute; right: clamp(16px, 3vw, 36px); bottom: clamp(20px, 4vw, 40px); z-index: 2; min-height: 44px; padding: 0 18px; border-radius: 999px; border: 1px solid rgba(255,255,255,.35); background: rgba(3,6,14,.5); backdrop-filter: blur(6px); color: #fff; font: 600 14px var(--font-text); cursor: pointer; }
+.intro-skip:hover { background: rgba(255,255,255,.12); }
+.intro-progress { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; z-index: 2; background: rgba(255,255,255,.1); }
+.intro-progress i { display: block; height: 100%; background: linear-gradient(90deg, #1A3A8F, #E4202E); transform-origin: left; animation: introProg 4.6s linear forwards; }
+@keyframes introProg { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* пока идёт анонс, анимации страницы стоят на паузе — герой «оживает» сразу после */
+body.intro-playing { overflow: hidden; }
+body.intro-playing main *, body.intro-playing main *::before, body.intro-playing main *::after { animation-play-state: paused !important; }
+
+/* кнопка повтора анонса в герое */
+.replay { display: inline-flex; align-items: center; gap: 10px; margin-top: var(--space-5); background: none; border: 0; color: var(--text-muted); font: 600 var(--text-sm) var(--font-text); cursor: pointer; padding: 6px 0; opacity: 0; animation: fadeUp .6s var(--ease) 1.15s forwards; }
+.replay i { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--border-strong); font-style: normal; font-size: 11px; transition: background var(--dur-fast), transform var(--dur-fast); }
+.replay:hover { color: var(--text); }
+.replay:hover i { background: var(--accent); border-color: var(--accent); transform: scale(1.08); }
