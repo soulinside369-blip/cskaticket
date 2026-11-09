@@ -12,7 +12,8 @@
 - Состояние (2026-11-09): макет v2 — SPA на тестовых данных в `apps/storefront` (`npm run dev`);
   `npm run release` → один файл `release/cskaticket-demo.html`; Pages — `.github/workflows/pages.yml`.
   Маркетинг одобрил. Есть анонс-заставка матча. Админка-макет: `apps/admin` (`npm run dev:admin`,
-  порт 4322) → `release/cskaticket-admin-demo.html`. Репозиторий закрытый, только локально.
+  порт 4322) → `release/cskaticket-admin-demo.html`. Репозиторий открытый: github.com/soulinside369-blip/cskaticket;
+  онлайн-показ на Pages: soulinside369-blip.github.io/cskaticket/ (решение владельца, 2026-11-09).
 - Модель: один движок, N тематических витрин, общая админка, общая аналитика.
 
 ## Как делаем визуал (это главное в продукте)
