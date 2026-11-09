@@ -105,8 +105,8 @@ export function matchView(slug: string): View {
           ${geo.map((g) => `<path d="${g.path}" fill="${byId.get(g.id)!.free ? cmap.get(byId.get(g.id)!.price) : '#2A3245'}" fill-opacity=".7"/>`).join('')}
           <rect class="mm-view" x="${VIEWBOX.x}" y="${VIEWBOX.y}" width="${VIEWBOX.w}" height="${VIEWBOX.h}"/>
         </svg>
-        <div class="coach" hidden><span>Наведите на сектор — увидите вид на лёд. Нажмите — погрузитесь к местам. Ctrl + колесо или щипок — масштаб.</span><button class="tool" data-coach-close aria-label="Скрыть подсказку">×</button></div>
       </div>
+      <div class="coach" hidden><span>Наведите на сектор — увидите вид на лёд. Нажмите — погрузитесь к местам. Ctrl + колесо или щипок — масштаб.</span><button class="tool" data-coach-close aria-label="Скрыть подсказку">×</button></div>
       <div class="price-legend" aria-label="Цены — нажмите, чтобы ограничить бюджет">
         ${levels.map((l) => `<button class="pl" data-level="${l.to}"><i style="background:${l.color}"></i><span class="num">${l.from === l.to ? rub(l.from) : `${rub(l.from)} – ${rub(l.to)}`}</span></button>`).join('')}
       </div>

@@ -554,9 +554,9 @@ export function mountBoard(root: HTMLElement, data: Data) {
   sortEl.addEventListener('change', renderList);
 
   // подсказка по жестам — один раз
-  const coach = stage.querySelector<HTMLElement>('.coach')!;
+  const coach = root.querySelector<HTMLElement>('.coach')!;
   if (!matchMedia('(hover: hover)').matches) {
-    coach.querySelector('span')!.textContent = 'Нажмите на сектор — схема приблизится к местам, а справа появится вид на лёд. Щипок — масштаб, «Вся арена» — назад.';
+    coach.querySelector('span')!.textContent = 'Нажмите на сектор — схема приблизится к местам, а ниже появится вид на лёд. Щипок — масштаб, «Вся арена» — назад.';
   }
   let seen = false;
   try { seen = !!localStorage.getItem('cskaticket:coach2'); } catch { /* ignore */ }
